@@ -1,0 +1,12 @@
+{
+  "name": "@react-native-ohos/react-native-xlog",
+  "version": "0.6.2-beta.1",
+  "description": "React Native bridge to Tencent Mars Xlog for HarmonyOS",
+  "main": "Index.ets",
+  "author": "EngsSH",
+  "license": "MIT",
+  "dependencies": {
+    "@rnoh/react-native-openharmony": "file:../../node_modules/@react-native-oh/react-native-harmony/react_native_openharmony.har",
+    "@ohos/xlog": "1.0.0"
+  }
+}
