@@ -1,132 +1,104 @@
-/*
- * 对标 iOS XLogCrashHandler.mm
- * 鸿蒙平台崩溃信号处理器
- *
- * 功能：
- * 1. 捕获 SIGABRT/SIGILL/SIGSEGV/SIGFPE/SIGBUS/SIGPIPE 信号
- * 2. 获取调用栈回溯（最多128帧）
- * 3. 将崩溃信息以 kLevelFatal 写入 xlog
- * 4. 使用原子计数器防递归（最多10次）
- */
-
+/* Native signal capture: persist a minimal record with async-signal-safe write,
+ * then replay it through xlog on the next open, outside signal context. */
 #include "XLogCrashHandler.h"
-
-#include <signal.h>
-#include <execinfo.h>
-#include <atomic>
-#include <unistd.h>
-#include <string.h>
-
 #include "mars/xlog/xloggerbase.h"
-#include "mars/xlog/xlogger.h"
+#include "mars/xlog/appender.h"
+#include <signal.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <cstdio>
+#include <string>
 
 namespace rnoh {
 namespace xlog {
+namespace {
+constexpr int signals[] = {SIGABRT, SIGILL, SIGSEGV, SIGFPE, SIGBUS, SIGPIPE};
+struct sigaction oldActions[6];
+volatile sig_atomic_t installed = 0;
+volatile sig_atomic_t crashFd = -1;
+std::string pendingPath;
 
-static std::atomic<int32_t> sUncaughtExceptionCount(0);
-static const int32_t UNCAUGHT_EXCEPTION_MAXIMUM = 10;
+void SignalHandler(int sig) {
+    // A fixed-size binary record avoids formatting, allocation and xlog locks.
+    if (crashFd >= 0) {
+        int record = sig;
+        (void)write(crashFd, &record, sizeof(record));
+    }
+    // Restore the previous handlers before redelivery, including the platform's
+    // crash reporter. A pending signal is delivered when this handler returns.
+    for (unsigned i = 0; i < sizeof(signals) / sizeof(signals[0]); ++i) {
+        (void)sigaction(signals[i], &oldActions[i], nullptr);
+    }
+    installed = 0;
+    (void)raise(sig);
+}
+}
 
-// 保存原始信号处理函数，用于卸载时恢复
-static struct sigaction sOldActions[6];
-static bool sHandlerInstalled = false;
-
-// 获取调用栈（对标 iOS +[XLogCrashHandler backtrace]）
-static void logBacktrace() {
-    void* callstack[128];
-    int frames = backtrace(callstack, 128);
-    char** strs = backtrace_symbols(callstack, frames);
-
-    if (strs != nullptr) {
-        for (int i = 0; i < frames; i++) {
-            XLoggerInfo info;
-            info.level = kLevelFatal;
-            info.tag = "crash";
-            info.filename = "";
-            info.func_name = "";
-            info.line = 0;
-            gettimeofday(&info.timeval, NULL);
-            info.pid = getpid();
-            info.tid = gettid();
-            info.maintid = gettid();
-            xlogger_Write(&info, strs[i]);
-        }
-        free(strs);
+void PrepareCrashLog(const std::string &logPath) {
+    pendingPath = logPath + "/xlog_crash.pending";
+    // The descriptor remains open for the lifetime of the process so a signal
+    // cannot race with close() and accidentally write to a reused descriptor.
+    if (crashFd < 0) {
+        crashFd = open(pendingPath.c_str(), O_WRONLY | O_CREAT | O_APPEND | O_CLOEXEC, 0600);
+    }
+    int fd = open(pendingPath.c_str(), O_RDONLY | O_CLOEXEC);
+    if (fd < 0) return;
+    int sig;
+    bool found = false;
+    while (read(fd, &sig, sizeof(sig)) == sizeof(sig)) {
+        char message[128];
+        snprintf(message, sizeof(message), "Signal %d was raised (recovered after restart).", sig);
+        XLoggerInfo info{};
+        info.level = kLevelFatal;
+        info.tag = "crash";
+        info.filename = "";
+        info.func_name = "";
+        gettimeofday(&info.timeval, nullptr);
+        info.pid = getpid();
+        info.tid = gettid();
+        info.maintid = info.tid;
+        xlogger_Write(&info, message);
+        found = true;
+    }
+    close(fd);
+    if (found) {
+        mars::xlog::appender_flush_sync();
+        // A repeat after interruption is preferable to losing an unprocessed record.
+        int truncateFd = open(pendingPath.c_str(), O_WRONLY | O_TRUNC | O_CLOEXEC);
+        if (truncateFd >= 0) close(truncateFd);
     }
 }
 
-// 信号处理函数（对标 iOS SignalHandler）
-static void SignalHandler(int sig) {
-    int32_t exceptionCount = sUncaughtExceptionCount.fetch_add(1, std::memory_order_relaxed) + 1;
-    if (exceptionCount > UNCAUGHT_EXCEPTION_MAXIMUM) {
-        return;
-    }
-
-    // 记录信号信息
-    char reason[128];
-    snprintf(reason, sizeof(reason), "Signal %d was raised.", sig);
-
-    XLoggerInfo info;
-    info.level = kLevelFatal;
-    info.tag = "crash";
-    info.filename = "";
-    info.func_name = "";
-    info.line = 0;
-    gettimeofday(&info.timeval, NULL);
-    info.pid = getpid();
-    info.tid = gettid();
-    info.maintid = gettid();
-    xlogger_Write(&info, reason);
-
-    // 记录调用栈
-    logBacktrace();
-
-    // 捕获后卸载信号处理器（与 iOS 行为一致）
-    UninstallUncaughtSignalHandler();
-}
-
-// 安装信号处理器（对标 iOS InstallUncaughtSignalHandler）
-void InstallUncaughtSignalHandler(void) {
-    if (sHandlerInstalled) {
-        return;
-    }
-
-    struct sigaction sa;
-    memset(&sa, 0, sizeof(sa));
+bool InstallUncaughtSignalHandler() {
+    if (installed) return true;
+    if (crashFd < 0) return false;
+    struct sigaction sa{};
     sa.sa_handler = SignalHandler;
     sigemptyset(&sa.sa_mask);
-
-    // 捕获与 iOS 相同的 6 种信号
-    sigaction(SIGABRT, &sa, &sOldActions[0]);
-    sigaction(SIGILL,  &sa, &sOldActions[1]);
-    sigaction(SIGSEGV, &sa, &sOldActions[2]);
-    sigaction(SIGFPE,  &sa, &sOldActions[3]);
-    sigaction(SIGBUS,  &sa, &sOldActions[4]);
-    sigaction(SIGPIPE, &sa, &sOldActions[5]);
-
-    sHandlerInstalled = true;
-}
-
-// 卸载信号处理器（对标 iOS UninstallUncaughtSignalHandler）
-void UninstallUncaughtSignalHandler(void) {
-    if (!sHandlerInstalled) {
-        return;
+    // Block all handled signals while recording to prevent recursive handlers.
+    for (int sig : signals) sigaddset(&sa.sa_mask, sig);
+    unsigned i = 0;
+    for (; i < sizeof(signals) / sizeof(signals[0]); ++i) {
+        if (sigaction(signals[i], &sa, &oldActions[i]) != 0) {
+            while (i > 0) { --i; (void)sigaction(signals[i], &oldActions[i], nullptr); }
+            return false;
+        }
     }
-
-    // 恢复默认信号处理
-    struct sigaction sa;
-    memset(&sa, 0, sizeof(sa));
-    sa.sa_handler = SIG_DFL;
-    sigemptyset(&sa.sa_mask);
-
-    sigaction(SIGABRT, &sa, nullptr);
-    sigaction(SIGILL,  &sa, nullptr);
-    sigaction(SIGSEGV, &sa, nullptr);
-    sigaction(SIGFPE,  &sa, nullptr);
-    sigaction(SIGBUS,  &sa, nullptr);
-    sigaction(SIGPIPE, &sa, nullptr);
-
-    sHandlerInstalled = false;
+    installed = 1;
+    return true;
 }
 
-} // namespace xlog
-} // namespace rnoh
+void UninstallUncaughtSignalHandler() {
+    if (!installed) return;
+    for (unsigned i = 0; i < sizeof(signals) / sizeof(signals[0]); ++i) {
+        struct sigaction current{};
+        if (sigaction(signals[i], nullptr, &current) == 0 &&
+            !(current.sa_flags & SA_SIGINFO) && current.sa_handler == SignalHandler) {
+            (void)sigaction(signals[i], &oldActions[i], nullptr);
+        }
+    }
+    installed = 0;
+}
+}
+}
+

@@ -5,11 +5,16 @@
 
 #pragma once
 
+#include <string>
+
 namespace rnoh {
 namespace xlog {
 
-void InstallUncaughtSignalHandler(void);
+void PrepareCrashLog(const std::string &logPath);
+bool InstallUncaughtSignalHandler(void);
 void UninstallUncaughtSignalHandler(void);
 
 } // namespace xlog
 } // namespace rnoh
+
+

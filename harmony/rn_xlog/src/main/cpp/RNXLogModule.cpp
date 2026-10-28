@@ -52,7 +52,7 @@ void RNXLogModule::Register(const std::string &logPath,
 
 static void WriteLog(TLogLevel level, const char* tag, const char* message)
 {
-    XLoggerInfo info;
+    XLoggerInfo info{};
     info.level = level;
     info.tag = tag;
     info.filename = "";
@@ -95,6 +95,7 @@ static jsi::Value HostFunctionOpen(
     config.cachedir_ = "";
     config.cache_days_ = 0;
     mars::xlog::appender_open(config);
+    rnoh::xlog::PrepareCrashLog(g_config.logPath);
     facebook::react::bindNativeLogger(rt, [](const std::string &message, unsigned int logLevel) {
         TLogLevel tLogLevel = MapLogLevel(logLevel);
         WriteLog(tLogLevel, "RN", message.c_str());
@@ -177,7 +178,9 @@ static jsi::Value HostFunctionInstallCrashHandler(
     size_t count
 )
 {
-    rnoh::xlog::InstallUncaughtSignalHandler();
+    if (!rnoh::xlog::InstallUncaughtSignalHandler()) {
+        throw jsi::JSError(rt, "Failed to install crash handler; call open() first and check log directory permissions");
+    }
     auto promiseConstructor = rt.global().getPropertyAsFunction(rt, "Promise");
     auto executor = jsi::Function::createFromHostFunction(
         rt,
@@ -234,3 +237,6 @@ RNXLogModule::~RNXLogModule()
 }
 
 } // namespace rnoh
+
+
+

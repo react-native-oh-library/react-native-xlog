@@ -28,21 +28,11 @@ target_include_directories(rnoh_xlog PUBLIC
 
 target_link_libraries(rnoh_xlog PUBLIC rnoh)
 
-# 链接 libmarsxlog.so
-# 搜索路径1：项目根目录的 .ohpm store
-if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../../../../../.ohpm/@ohos+xlog@1.0.0/oh_modules/@ohos/xlog/libs/${OHOS_ARCH}")
-    set(XLOG_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../../../.ohpm/@ohos+xlog@1.0.0/oh_modules/@ohos/xlog/libs/${OHOS_ARCH})
-    message("XLOG_PATH1: ${XLOG_PATH}")
-# 搜索路径2：HAR 内部的 oh_modules
-elseif(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../../../oh_modules/@ohos/xlog/libs/${OHOS_ARCH}")
-    set(XLOG_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../oh_modules/@ohos/xlog/libs/${OHOS_ARCH})
-    message("XLOG_PATH2: ${XLOG_PATH}")
-else()
-    message("XLOG_PATH: empty")
+# so 已 vendored 进库(来源:openharmony_tpc_samples/XLog 本地构建,arm64-v8a),
+# 随 har/hap 自动打包,不再依赖 ohpm 包 @ohos/xlog
+set(XLOG_SO "${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/${OHOS_ARCH}/libmarsxlog.so")
+if(NOT EXISTS "${XLOG_SO}")
+    message(FATAL_ERROR "rnoh_xlog: missing vendored ${XLOG_SO} (only arm64-v8a is shipped)")
 endif()
-
-file(REAL_PATH "${XLOG_PATH}" XLOG_PATH)
-
-set(XLOG_SO "${XLOG_PATH}/libmarsxlog.so")
 
 target_link_libraries(rnoh_xlog PUBLIC ${XLOG_SO})

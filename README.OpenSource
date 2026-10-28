@@ -1,0 +1,20 @@
+[
+  {
+    "Name": "react-native-xlog",
+    "License": "MIT License",
+    "License File": "https://github.com/EngsShi/react-native-xlog/blob/master/LICENSE",
+    "Version Number": "0.5.0",
+    "Owner": "panjinling@huawei.com",
+    "Upstream URL": "https://github.com/EngsShi/react-native-xlog",
+    "Description": "React Native wrapper for Tencent mars xlog"
+  },
+  {
+    "Name": "mars",
+    "License": "MIT License",
+    "License File": "https://github.com/Tencent/mars/blob/master/LICENSE",
+    "Version Number": "Not specified",
+    "Owner": "panjinling@huawei.com",
+    "Upstream URL": "https://github.com/Tencent/mars",
+    "Description": "Tencent mars xlog logging library"
+  }
+]

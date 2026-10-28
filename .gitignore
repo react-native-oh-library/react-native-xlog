@@ -55,3 +55,8 @@ Pods/
 *.swp
 
 *.iml
+# npm pack artifacts
+/*.tgz
+
+# Jest coverage reports
+/jest/coverage/
