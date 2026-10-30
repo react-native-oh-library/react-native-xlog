@@ -1,11 +1,12 @@
-> 文档模板:v0.4.2
+> 文档模板：v0.4.2
 
 <p align="center">
   <h1 align="center"> <code>react-native-xlog</code> </h1>
 </p>
+
 本项目基于 [react-native-xlog](https://www.npmjs.com/package/react-native-xlog) 开发。
 
-该三方库已适配 React Native OpenHarmony(RNOH),支持直接从 npm 下载,包名为:`@react-native-ohos/react-native-xlog`(JS 别名 `react-native-xlog`),版本所属关系如下:
+该第三方库的仓库已迁移至 Gitcode，且支持直接从 npm 下载，新的包名为：`@react-native-ohos/react-native-xlog`，版本所属关系如下：
 
 | 三方库名称 | 三方库版本(npm地址) | 发布信息 | 支持RN版本 | Autolink | 编译API版本 | 社区基线版本 | 源码地址 |
 | - | - | - | - | - | - | - | - |
@@ -22,15 +23,31 @@ react-native-xlog 是腾讯 [mars xlog](https://github.com/Tencent/mars) 高性�
 - 崩溃捕获:安装处理器后,应用崩溃信息写入 xlog
 - console.log 重定向:open 后 JS console 输出写入 xlog,close 后恢复框架默认(hilog)
 
+## 下载安装
+
+进入到工程目录并输入以下命令：
+
+**npm**
+
+```bash
+npm install @react-native-ohos/react-native-xlog
+```
+
+**yarn**
+
+```bash
+yarn add @react-native-ohos/react-native-xlog
+```
+
 ## Link
 
 | | 是否支持autolink | RN框架版本 |
 | - | - | - |
 | ~0.5.1 | 是 | 0.72.* / 0.77.* / 0.82.* / 0.84.* |
 
-使用AutoLink的工程需要根据该文档配置,Autolink框架指导文档:https://gitcode.com/CPF-RN/ohos_react_native/blob/master/docs/zh-cn/Autolinking.md
+使用AutoLink的工程需要根据该文档配置，Autolink框架指导文档：https://gitcode.com/CPF-RN/ohos_react_native/blob/master/docs/zh-cn/Autolinking.md
 
-如您使用的版本支持 Autolink,并且工程已接入 Autolink,可跳过ManualLink配置。
+如您使用的版本支持 Autolink，并且工程已接入 Autolink，可跳过ManualLink配置。
 <details>
   <summary>ManualLink: 此步骤为手动配置原生依赖项的指导</summary>
 
@@ -38,11 +55,11 @@ react-native-xlog 是腾讯 [mars xlog](https://github.com/Tencent/mars) 高性�
 
 ### 1. Overrides RN SDK
 
-为了让工程依赖同一个版本的 RN SDK,需要在工程根目录的 `oh-package.json5` 添加 overrides 字段,指向工程需要使用的 RN SDK 版本。替换的版本既可以是一个具体的版本号,也可以是一个模糊版本,还可以是本地存在的 HAR 包或源码目录。
+为了让工程依赖同一个版本的 RN SDK，需要在工程根目录的 `oh-package.json5` 添加 overrides 字段，指向工程需要使用的 RN SDK 版本。替换的版本既可以是一个具体的版本号，也可以是一个模糊版本，还可以是本地存在的 HAR 包或源码目录。
 
 关于该字段的作用请阅读[官方说明](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-oh-package-json5-V5#zh-cn_topic_0000001792256137_overrides)
 
-```json
+```json5
 {
   "overrides": {
     "@rnoh/react-native-openharmony": "~0.84.2" // 0.84 工程;其他框架版本使用对应的 RNOH 版本
@@ -54,16 +71,16 @@ react-native-xlog 是腾讯 [mars xlog](https://github.com/Tencent/mars) 高性�
 
 ### 2. 引入原生端代码
 
-目前有两种方法:
+目前有两种方法：
 
-1. 通过 har 包引入(在 IDE 完善相关功能后该方法会被遗弃,目前首选此方法);
-2. 直接链接源码。
+- 通过 har 包引入；
+- 直接链接源码。
 
-方法一:通过 har 包引入(推荐)
+方法一：通过 har 包引入（推荐）
 
 > [!TIP] har 包位于三方库安装路径的 `harmony` 文件夹下。
 
-打开 `entry/oh-package.json5`,添加以下依赖
+打开 `entry/oh-package.json5`，添加以下依赖
 
 ```json
 "dependencies": {
@@ -74,22 +91,22 @@ react-native-xlog 是腾讯 [mars xlog](https://github.com/Tencent/mars) 高性�
 
 点击右上角的 `sync` 按钮
 
-或者在终端执行:
+或者在命令行终端执行：
 
 ```bash
 cd entry
 ohpm install
 ```
 
-方法二:直接链接源码
+方法二：直接链接源码
 
-> [!TIP] 如需使用直接链接源码,请参考[直接链接源码说明](https://gitcode.com/CPF-RN/usage-docs/blob/master/zh-cn/link-source-code.md)
+> [!TIP] 如需使用直接链接源码，请参考[直接链接源码说明](https://gitcode.com/CPF-RN/usage-docs/blob/master/zh-cn/link-source-code.md)
 
 ### 3. 配置 CMakeLists 和引入 RNXLogPackage
 
 > 若工程已接入 RNOH AutoLink,且本库的 `harmony.autolinking` 配置生效(RNXLogPackage / rnoh_xlog),则 CMake 与 PackageProvider 注册可由 AutoLink 自动生成,可跳过本节手动配置。
 
-打开 `entry/src/main/cpp/CMakeLists.txt`,添加:
+打开 `entry/src/main/cpp/CMakeLists.txt`，添加：
 
 ```diff
 project(rnapp)
@@ -122,7 +139,7 @@ target_link_libraries(rnoh_app PUBLIC rnoh)
 + target_link_libraries(rnoh_app PUBLIC rnoh_xlog)
 ```
 
-打开 `entry/src/main/cpp/PackageProvider.cpp`,添加:
+打开 `entry/src/main/cpp/PackageProvider.cpp`，添加：
 
 ```diff
   #include "RNOH/PackageProvider.h"
@@ -137,9 +154,9 @@ target_link_libraries(rnoh_app PUBLIC rnoh)
   }
 ```
 
-### 4. 在 ArkTs 侧引入 RNXLogPackage
+### 4. 在 ArkTS 侧引入 RNXLogPackage
 
-打开 `entry/src/main/ets/RNPackagesFactory.ts`(.ets),添加:
+打开 `entry/src/main/ets/RNPackagesFactory.ts`（或 `.ets`），添加：
 
 ```diff
 + import { RNXLogPackage } from '@react-native-ohos/react-native-xlog';
@@ -176,7 +193,7 @@ RNXLogPackage::registerXLog(
 
 点击右上角的 `sync` 按钮
 
-或者在终端执行:
+或者在命令行终端执行：
 
 ```bash
 cd entry
@@ -204,11 +221,11 @@ ohpm install
 
 ### 编译运行API要求
 
-> [!TIP] 当前三方库所有版本均已实现版本隔离,支持在 `API12+` 工程编译,及 `API12+` ROM运行。
+> [!TIP] 当前三方库所有版本均已实现版本隔离，支持在 `API12+` 工程编译，及 `API12+` ROM运行。
 
 ## 使用示例
 
-下面的代码展示了这个库的基本使用场景:
+下面的代码展示了这个库的基本使用场景：
 
 > [!WARNING] 使用时 import 的库名不变,JS 侧通过 `react-native-xlog` 导入(Autolink 工程用别名导入;har 手动链接工程用 `@react-native-ohos/react-native-xlog` 导入,两者等价)。
 
@@ -279,7 +296,7 @@ console.log('这条回到 hilog 默认输出');
 
 > [!TIP] "Platform"列表示该属性在原三方库上支持的平台。
 
-> [!TIP] "HarmonyOS Support"列为 yes 表示 HarmonyOS 平台支持该属性;no 则表示不支持;partially 表示部分支持。使用方法跨平台一致,效果对标 iOS 的效果。
+> [!TIP] "HarmonyOS Support"列为 yes 表示 HarmonyOS平台支持 该属性；no 则表示不支持；partially 表示部分支持。使用方法跨平台一致，效果对标 iOS 或 Android 的效果。
 
 本库对外暴露 `XLog` 模块(TurboModule `XLogBridge` 的 JS 封装)。本库无导出属性/常量,接口全部为方法,说明如下:
 

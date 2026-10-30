@@ -1,0 +1,141 @@
+<?xml version='1.0' encoding='utf-8'?>
+<configuration>
+    <oatconfig>
+        <licensefile>LICENSE</licensefile>
+        <policylist>
+            <policy name="projectPolicy" desc="项目许可证">
+                <policyitem type="license" name="MIT" path=".*" desc="项目及 Mars 使用 MIT 许可证" />
+            </policy>
+        </policylist>
+        <filefilterlist>
+            <filefilter name="copyrightPolicyFilter" desc="生成文件、第三方源码及配置文件">
+                <filteritem type="filepath" name="harmony/rn_xlog/src/main/cpp/generated/.*" desc="Codegen 生成文件" />
+                <filteritem type="filepath" name="harmony/rn_xlog/src/main/ets/generated/.*" desc="Codegen 生成文件" />
+                <filteritem type="filepath" name="harmony/rn_xlog/src/main/cpp/mars/.*" desc="Mars 上游头文件，保留原始版权声明" />
+                <filteritem type="filepath" name="harmony/rn_xlog/src/test/.*" desc="自动生成的测试模板" />
+                <filteritem type="filepath" name="harmony/rn_xlog/src/ohosTest/.*" desc="自动生成的测试模板" />
+                <filteritem type="filepath" name="example/harmony/entry/src/main/cpp/generated/.*" desc="Codegen 生成文件" />
+                <filteritem type="filepath" name="example/harmony/entry/src/main/resources/rawfile/.*" desc="Metro 生成的 bundle 和资源" />
+                <filteritem type="filepath" name="jest/coverage/.*" desc="测试覆盖率生成文件" />
+                <filteritem type="filepath" name="lib/.*" desc="构建生成文件" />
+                <filteritem type="filename" name="LICENSE" desc="项目许可证文件" />
+                <filteritem type="filename" name="BuildProfile.ets" desc="工程配置文件" />
+                <filteritem type="filename" name="buildEnv.sh" desc="构建脚本" />
+                <filteritem type="filename" name="yarn.lock" desc="依赖锁文件" />
+                <filteritem type="filename" name="*.config.js" desc="工程配置文件" />
+                <filteritem type="filename" name=".npmignore" desc="打包配置" />
+                <filteritem type="filename" name=".yarnrc" desc="包管理配置" />
+                <filteritem type="filename" name="*.podspec" desc="工程配置文件" />
+                <filteritem type="filepath" name="example/.buckconfig" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/.flowconfig" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/.node-version" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/.npmrc" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/.prettierrc.js" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/.watchmanconfig" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/__tests__/index.js" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/harmony/.clang-tidy" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/harmony/.clangd" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/harmony/entry/src/main/cpp/CrashTestPackage.h" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/harmony/entry/src/main/cpp/PackageProvider.cpp" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/harmony/entry/src/main/ets/CrashTestPackage.ets" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/harmony/entry/src/main/ets/RNPackagesFactory.ets" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/harmony/entry/src/main/ets/entryability/EntryAbility.ets" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/harmony/entry/src/main/ets/entrybackupability/EntryBackupAbility.ets" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/harmony/entry/src/main/ets/pages/Index.ets" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/harmony/entry/src/ohosTest/ets/test/Ability.test.ets" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/harmony/entry/src/ohosTest/ets/test/List.test.ets" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/harmony/entry/src/test/List.test.ets" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/harmony/entry/src/test/LocalUnit.test.ets" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/index.js" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/scripts/create-build-profile.js" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/src/Home.js" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/src/UpstreamExample.js" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/src/XLogTest.tsx" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/src/types/react-native-xlog.d.ts" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="harmony/rn_xlog/Index.ets" desc="鸿蒙适配源码，保留现有文件头；缺失声明需人工核查" />
+                <filteritem type="filepath" name="harmony/rn_xlog/src/main/cpp/RNXLogModule.cpp" desc="鸿蒙适配源码，保留现有文件头；缺失声明需人工核查" />
+                <filteritem type="filepath" name="harmony/rn_xlog/src/main/cpp/RNXLogModule.h" desc="鸿蒙适配源码，保留现有文件头；缺失声明需人工核查" />
+                <filteritem type="filepath" name="harmony/rn_xlog/src/main/cpp/RNXLogPackage.h" desc="鸿蒙适配源码，保留现有文件头；缺失声明需人工核查" />
+                <filteritem type="filepath" name="harmony/rn_xlog/src/main/cpp/XLogCrashHandler.cpp" desc="鸿蒙适配源码，保留现有文件头；缺失声明需人工核查" />
+                <filteritem type="filepath" name="harmony/rn_xlog/src/main/cpp/XLogCrashHandler.h" desc="鸿蒙适配源码，保留现有文件头；缺失声明需人工核查" />
+                <filteritem type="filepath" name="harmony/rn_xlog/src/main/cpp/XLogNativeLogger.h" desc="鸿蒙适配源码，保留现有文件头；缺失声明需人工核查" />
+                <filteritem type="filepath" name="harmony/rn_xlog/src/main/ets/RNXLogModule.ets" desc="鸿蒙适配源码，保留现有文件头；缺失声明需人工核查" />
+                <filteritem type="filepath" name="harmony/rn_xlog/src/main/ets/RNXLogPackage.ets" desc="鸿蒙适配源码，保留现有文件头；缺失声明需人工核查" />
+                <filteritem type="filepath" name="harmony/rn_xlog/ts.ets" desc="鸿蒙适配源码，保留现有文件头；缺失声明需人工核查" />
+                <filteritem type="filepath" name="index.js" desc="上游 JavaScript 接口，保留原始文件头" />
+                <filteritem type="filepath" name="jest/__tests__/XLog-test.js" desc="测试文件，保留现有版权声明" />
+                <filteritem type="filepath" name="jest/jest.setup.js" desc="测试文件，保留现有版权声明" />
+            </filefilter>
+            <filefilter name="defaultPolicyFilter" desc="生成文件、第三方源码及配置文件">
+                <filteritem type="filepath" name="harmony/rn_xlog/src/main/cpp/generated/.*" desc="Codegen 生成文件" />
+                <filteritem type="filepath" name="harmony/rn_xlog/src/main/ets/generated/.*" desc="Codegen 生成文件" />
+                <filteritem type="filepath" name="harmony/rn_xlog/src/main/cpp/mars/.*" desc="Mars 上游头文件，保留原始版权声明" />
+                <filteritem type="filepath" name="harmony/rn_xlog/src/test/.*" desc="自动生成的测试模板" />
+                <filteritem type="filepath" name="harmony/rn_xlog/src/ohosTest/.*" desc="自动生成的测试模板" />
+                <filteritem type="filepath" name="example/harmony/entry/src/main/cpp/generated/.*" desc="Codegen 生成文件" />
+                <filteritem type="filepath" name="example/harmony/entry/src/main/resources/rawfile/.*" desc="Metro 生成的 bundle 和资源" />
+                <filteritem type="filepath" name="jest/coverage/.*" desc="测试覆盖率生成文件" />
+                <filteritem type="filepath" name="lib/.*" desc="构建生成文件" />
+                <filteritem type="filename" name="LICENSE" desc="项目许可证文件" />
+                <filteritem type="filename" name="BuildProfile.ets" desc="工程配置文件" />
+                <filteritem type="filename" name="buildEnv.sh" desc="构建脚本" />
+                <filteritem type="filename" name="yarn.lock" desc="依赖锁文件" />
+                <filteritem type="filename" name="*.config.js" desc="工程配置文件" />
+                <filteritem type="filename" name=".npmignore" desc="打包配置" />
+                <filteritem type="filename" name=".yarnrc" desc="包管理配置" />
+                <filteritem type="filename" name="*.podspec" desc="工程配置文件" />
+                <filteritem type="filepath" name="example/.buckconfig" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/.flowconfig" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/.node-version" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/.npmrc" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/.prettierrc.js" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/.watchmanconfig" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/__tests__/index.js" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/harmony/.clang-tidy" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/harmony/.clangd" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/harmony/entry/src/main/cpp/CrashTestPackage.h" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/harmony/entry/src/main/cpp/PackageProvider.cpp" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/harmony/entry/src/main/ets/CrashTestPackage.ets" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/harmony/entry/src/main/ets/RNPackagesFactory.ets" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/harmony/entry/src/main/ets/entryability/EntryAbility.ets" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/harmony/entry/src/main/ets/entrybackupability/EntryBackupAbility.ets" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/harmony/entry/src/main/ets/pages/Index.ets" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/harmony/entry/src/ohosTest/ets/test/Ability.test.ets" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/harmony/entry/src/ohosTest/ets/test/List.test.ets" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/harmony/entry/src/test/List.test.ets" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/harmony/entry/src/test/LocalUnit.test.ets" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/index.js" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/scripts/create-build-profile.js" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/src/Home.js" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/src/UpstreamExample.js" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/src/XLogTest.tsx" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="example/src/types/react-native-xlog.d.ts" desc="示例、测试或工程配置文件，保留现有文件头" />
+                <filteritem type="filepath" name="harmony/rn_xlog/Index.ets" desc="鸿蒙适配源码，保留现有文件头；缺失声明需人工核查" />
+                <filteritem type="filepath" name="harmony/rn_xlog/src/main/cpp/RNXLogModule.cpp" desc="鸿蒙适配源码，保留现有文件头；缺失声明需人工核查" />
+                <filteritem type="filepath" name="harmony/rn_xlog/src/main/cpp/RNXLogModule.h" desc="鸿蒙适配源码，保留现有文件头；缺失声明需人工核查" />
+                <filteritem type="filepath" name="harmony/rn_xlog/src/main/cpp/RNXLogPackage.h" desc="鸿蒙适配源码，保留现有文件头；缺失声明需人工核查" />
+                <filteritem type="filepath" name="harmony/rn_xlog/src/main/cpp/XLogCrashHandler.cpp" desc="鸿蒙适配源码，保留现有文件头；缺失声明需人工核查" />
+                <filteritem type="filepath" name="harmony/rn_xlog/src/main/cpp/XLogCrashHandler.h" desc="鸿蒙适配源码，保留现有文件头；缺失声明需人工核查" />
+                <filteritem type="filepath" name="harmony/rn_xlog/src/main/cpp/XLogNativeLogger.h" desc="鸿蒙适配源码，保留现有文件头；缺失声明需人工核查" />
+                <filteritem type="filepath" name="harmony/rn_xlog/src/main/ets/RNXLogModule.ets" desc="鸿蒙适配源码，保留现有文件头；缺失声明需人工核查" />
+                <filteritem type="filepath" name="harmony/rn_xlog/src/main/ets/RNXLogPackage.ets" desc="鸿蒙适配源码，保留现有文件头；缺失声明需人工核查" />
+                <filteritem type="filepath" name="harmony/rn_xlog/ts.ets" desc="鸿蒙适配源码，保留现有文件头；缺失声明需人工核查" />
+                <filteritem type="filepath" name="index.js" desc="上游 JavaScript 接口，保留原始文件头" />
+                <filteritem type="filepath" name="jest/__tests__/XLog-test.js" desc="测试文件，保留现有版权声明" />
+                <filteritem type="filepath" name="jest/jest.setup.js" desc="测试文件，保留现有版权声明" />
+            </filefilter>
+            <filefilter name="binaryFileTypePolicyFilter" desc="已识别的二进制资源和构建产物">
+                <filteritem type="filepath" name="harmony/rn_xlog/libs/arm64-v8a/libmarsxlog.so" desc="Mars Xlog 预编译依赖" />
+                <filteritem type="filepath" name="harmony/rn_xlog.har" desc="构建生成的 HAR 包" />
+                <filteritem type="filepath" name="example/harmony/entry/src/main/resources/rawfile/.*" desc="Metro 生成的资源" />
+                <filteritem type="filepath" name="example/harmony/AppScope/resources/base/media/.*" desc="示例应用图标" />
+                <filteritem type="filepath" name="example/harmony/entry/src/main/resources/base/media/.*" desc="示例应用图片" />
+                <filteritem type="filepath" name="jest/coverage/.*" desc="测试覆盖率生成文件" />
+                <filteritem type="filename" name="*.tgz" desc="npm 打包产物" />
+            </filefilter>
+            <filefilter name="thirdPartyLibrariesFilter" desc="预编译第三方依赖">
+                <filteritem type="filepath" name="harmony/rn_xlog/libs/arm64-v8a/libmarsxlog.so" desc="Mars Xlog 预编译依赖，来源见 README.OpenSource" />
+            </filefilter>
+        </filefilterlist>
+    </oatconfig>
+</configuration>

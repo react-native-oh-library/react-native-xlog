@@ -1,13 +1,14 @@
-> Document Template:v0.4.2
+> Document Template: v0.4.2
 
 <p align="center">
   <h1 align="center"> <code>react-native-xlog</code> </h1>
 </p>
+
 This project is based on [react-native-xlog](https://www.npmjs.com/package/react-native-xlog).
 
-This third-party library is adapted for React Native OpenHarmony (RNOH) and is available for direct download from npm. The package name is: `@react-native-ohos/react-native-xlog` (JS alias `react-native-xlog`). The version correspondence details are as follows:
+This third-party library has been migrated to Gitcode and is now available for direct download from npm, the new package name is: `@react-native-ohos/react-native-xlog`, the version correspondence details are as follows:
 
-| Name | Version(Npm Address) | Release Information | Supported RN Version | Autolink | Compile API Version | Community Baseline Version | Source code address |
+| Name | Version(Npm Address) | Release Information | Supported RN Version | Supported Autolink | Compile API Version | Community Baseline Version | Source code address |
 | - | - | - | - | - | - | - | - |
 | @react-native-ohos/react-native-xlog | [~ 0.5.1 (In development)](https://www.npmjs.com/package/@react-native-ohos/react-native-xlog) | [GitHub Releases](https://github.com/react-native-oh-library/react-native-xlog/releases) | 0.72.* / 0.77.* / 0.82.* / 0.84.* | Yes | API12+ | 0.6.1 | [master](https://github.com/react-native-oh-library/react-native-xlog) |
 
@@ -22,27 +23,44 @@ This library provides the React Native HarmonyOS adaptation, implemented using a
 - Crash capture: after installing the handler, app crash info is written to xlog
 - console.log redirection: after open, JS console output goes to xlog; after close, the framework default (hilog) is restored
 
+## Installation
+
+Go to the project directory and execute the following instruction:
+
+**npm**
+
+```bash
+npm install @react-native-ohos/react-native-xlog
+```
+
+**yarn**
+
+```bash
+yarn add @react-native-ohos/react-native-xlog
+```
+
 ## Link
 
-| | Autolink supported | RN framework version |
+| | Supported Autolink | Supported RN Version |
 | - | - | - |
 | ~0.5.1 | Yes | 0.72.* / 0.77.* / 0.82.* / 0.84.* |
 
-Projects using AutoLink need to be configured according to the Autolink guide: https://gitcode.com/CPF-RN/ohos_react_native/blob/master/docs/en/Autolinking.md
+Projects using AutoLink need to be configured according to this document, AutoLink framework guide: https://gitcode.com/CPF-RN/ohos_react_native/blob/master/docs/en/Autolinking.md
 
-If the version you use supports Autolink and your project has integrated Autolink, you can skip the ManualLink configuration.
+If the version you are using supports Autolink and the project has integrated Autolink, you can skip the ManualLink configuration.
+
 <details>
-  <summary>ManualLink: This section guides you through manually configuring native dependencies</summary>
+  <summary>ManualLink: This step provides guidance for manually configuring native dependencies.</summary>
 
-First, open the HarmonyOS project `harmony` in your project with DevEco Studio.
+Open the `harmony` directory of the OpenHarmony project in DevEco Studio.
 
 ### 1. Overrides RN SDK
 
-To make the project depend on the same version of the RN SDK, add the overrides field to the `oh-package.json5` in the project root directory, pointing to the RN SDK version to be used. The replacement version can be a specific version number, a fuzzy version, or a local HAR package or source directory.
+To ensure the project relies on the same version of the RN SDK, you need to add an `overrides` field in the project's root `oh-package.json5` file, specifying the RN SDK version to be used. The replacement version can be a specific version number, a semver range, or a locally available HAR package or source directory.
 
-For the effect of this field, see the [official documentation](https://developer.huawei.com/consumer/en/doc/harmonyos-guides-V5/ide-oh-package-json5-V5#en-cn_topic_0000001792256137_overrides)
+For more information about the purpose of this field, please refer to the [official documentation](https://developer.huawei.com/consumer/en/doc/harmonyos-guides-V5/ide-oh-package-json5-V5#en-us_topic_0000001792256137_overrides).
 
-```json
+```json5
 {
   "overrides": {
     "@rnoh/react-native-openharmony": "~0.84.2" // 0.84 project; use the matching RNOH version for other framework versions
@@ -52,18 +70,18 @@ For the effect of this field, see the [official documentation](https://developer
 }
 ```
 
-### 2. Import native code
+### 2. Introducing Native Code
 
-There are two approaches:
+Currently, two methods are available:
 
-1. Import via the har package (this method will be deprecated after the IDE improves related functions; currently the preferred approach);
-2. Link the source code directly.
+- Use the HAR file.
+- Directly link to the source code.
 
-Approach 1: import via the har package (recommended)
+Method 1 (recommended): Use the HAR file.
 
-> [!TIP] The har package is located in the `harmony` folder of the third-party library installation path.
+> [!TIP] The HAR file is stored in the `harmony` directory in the installation path of the third-party library.
 
-Open `entry/oh-package.json5` and add the following dependency:
+Open `entry/oh-package.json5` file and add the following dependencies:
 
 ```json
 "dependencies": {
@@ -72,22 +90,24 @@ Open `entry/oh-package.json5` and add the following dependency:
   }
 ```
 
-Click the `sync` button in the upper right corner, or run in the terminal:
+Click the `sync` button in the upper right corner.
+
+Alternatively, run the following instruction on the terminal:
 
 ```bash
 cd entry
 ohpm install
 ```
 
-Approach 2: link the source code directly
+Method 2: Directly link to the source code.
 
-> [!TIP] If you need to link the source code directly, please refer to the [direct source linking guide](https://gitcode.com/CPF-RN/usage-docs/blob/master/en/link-source-code.md)
+> [!TIP] For details, see [Directly Linking Source Code](https://gitcode.com/CPF-RN/usage-docs/blob/master/en/link-source-code.md).
 
-### 3. Configure CMakeLists and import RNXLogPackage
+### 3. Configuring CMakeLists and Introducing RNXLogPackage
 
 > If the project has integrated RNOH AutoLink and the `harmony.autolinking` configuration (RNXLogPackage / rnoh_xlog) takes effect, the CMake and PackageProvider registration can be generated automatically by AutoLink, and this section can be skipped.
 
-Open `entry/src/main/cpp/CMakeLists.txt` and add:
+Open `entry/src/main/cpp/CMakeLists.txt` and add the following code:
 
 ```diff
 project(rnapp)
@@ -135,7 +155,7 @@ Open `entry/src/main/cpp/PackageProvider.cpp` and add:
   }
 ```
 
-### 4. Import RNXLogPackage on the ArkTS side
+### 4. Introducing RNXLogPackage to ArkTS
 
 Open `entry/src/main/ets/RNPackagesFactory.ts` (or `.ets`) and add:
 
@@ -170,18 +190,21 @@ RNXLogPackage::registerXLog(
 
 Adjust the directory for your app and ensure it exists and is writable. This configuration applies to both automatic and manual linking; defaults are used if it is not registered.
 
-### Run
+## Running
 
-Click the `sync` button in the upper right corner, or run in the terminal:
+Click the `sync` button in the upper right corner.
+
+Alternatively, run the following instruction on the terminal:
 
 ```bash
 cd entry
 ohpm install
 ```
 
-Then compile and run.
+Then build and run the code.
 
-## Constraints and Limitations
+
+## Constraints
 
 ### Compatibility
 
@@ -198,13 +221,13 @@ The following environments have been verified:
 
 None.
 
-### Build and Run API Requirements
+### API requirements
 
-> [!TIP] All versions of this library are version-isolated and support building on `API12+` projects and running on `API12+` ROMs.
+> [!TIP] All versions of the current third-party libraries have implemented version isolation, supporting compilation in `API12+` projects and execution on `API12+` ROMs.
 
-## Usage Example
+## Example
 
-The following code shows the basic usage scenario of this library:
+The following code shows the basic use scenario of the repository:
 
 > [!WARNING] The import name stays the same: import from `react-native-xlog` on the JS side (alias import for Autolink projects; `@react-native-ohos/react-native-xlog` for manually har-linked projects; both are equivalent).
 
@@ -222,7 +245,7 @@ XLog.error('tag', 'something failed');
 await XLog.close();
 ```
 
-## Usage
+## How to Use
 
 **Lifecycle management**
 
@@ -272,11 +295,11 @@ await XLog.close();
 console.log('this line goes back to the default hilog output');
 ```
 
-## API
+## Available APIs
 
-> [!TIP] The "Platform" column indicates the platforms supported by this property in the original third-party library.
+> [!TIP] The **Platform** column indicates the platform where the properties are supported in the original third-party library.
 
-> [!TIP] In the "HarmonyOS Support" column, yes means the property is supported on HarmonyOS; no means it is not supported; partially means it is partially supported. The usage is consistent across platforms, and the effect matches iOS.
+> [!TIP] If the value of **HarmonyOS Support** is **yes**, it means that the OpenHarmony platform supports this property; **no** means the opposite; **partially** means some capabilities of this property are supported. The usage method is the same on different platforms and the effect is the same as that of iOS or Android.
 
 This library exposes the `XLog` module (the JS wrapper of TurboModule `XLogBridge`). It has no exported properties/constants; all APIs are methods:
 
@@ -299,7 +322,7 @@ This library exposes the `XLog` module (the JS wrapper of TurboModule `XLogBridg
 
 None
 
-## Others
+## Other
 
 None
 
@@ -337,7 +360,7 @@ None
 └── README_en.md                         # English documentation
 ````
 
-## Contributing
+## How to Contribute
 
 Issues are welcome at [Issue](https://github.com/react-native-oh-library/react-native-xlog/issues), and [PRs](https://github.com/react-native-oh-library/react-native-xlog/pulls) are very welcome too.
 
