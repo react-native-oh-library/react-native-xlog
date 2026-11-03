@@ -4,8 +4,10 @@
 
 'use strict';
 
-import { NativeModules, NativeAppEventEmitter, DeviceEventEmitter, Platform } from 'react-native';
-const XLogBridge = NativeModules.XLogBridge;
+import { NativeModules, NativeAppEventEmitter, DeviceEventEmitter, Platform, TurboModuleRegistry } from 'react-native';
+const XLogBridge = Platform.OS === 'harmony'
+  ? TurboModuleRegistry.get('XLogBridge')
+  : NativeModules.XLogBridge;
 
 const emitter = (Platform.OS === 'android' ? DeviceEventEmitter : NativeAppEventEmitter)
 

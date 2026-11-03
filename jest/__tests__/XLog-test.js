@@ -15,7 +15,8 @@ const mockBridge = {
 };
 
 jest.mock('react-native', () => ({
-  NativeModules: {XLogBridge: mockBridge},
+  NativeModules: {},
+  TurboModuleRegistry: {get: jest.fn(name => name === 'XLogBridge' ? mockBridge : null)},
   NativeAppEventEmitter: {},
   DeviceEventEmitter: {},
   Platform: {OS: 'harmony'},
